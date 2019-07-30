@@ -1,0 +1,34 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Clean",
+            "type": "shell",
+            "command": "rm",
+            "args": [
+                "-rf",
+                "${workspaceRoot}/build"
+            ]
+        },
+        {
+            "label": "CreateBuildDir",
+            "type": "shell",
+            "command": "mkdir",
+            "args": [
+                "${workspaceRoot}/build"
+            ]
+        },
+        {
+            "label": "Compile",
+            "type": "shell",
+            "command": "sh",
+            "args": [
+                "./build.sh"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        }
+    ]
+}

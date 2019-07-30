@@ -1,0 +1,5 @@
+# Git Ignore
+# This file contains patterns to instruct git about which files to ignore (leave locally).
+
+# Build output
+build

@@ -1,4 +1,4 @@
-INC="-I./inc/math -I./inc/render -I/usr/include/SDL2"
+INC="-I./inc -I./inc/math -I./inc/render -I/usr/include/SDL2"
 INCDIR=./inc
 SRCROOT=./src
 SRCDIRS=(math render)

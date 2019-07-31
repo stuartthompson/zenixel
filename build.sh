@@ -6,7 +6,7 @@ BUILDDIR=./build
 DISTDIR=./dist
 OBJDIR=$BUILDDIR/obj
 LIBDIR=$BUILDDIR/lib
-OUTPUT=zenlib.a
+OUTPUT=libzenixel.a
 CFLAGS="-D_REENTRANT --std=c++17"
 
 # Clean up previous builds
@@ -19,8 +19,7 @@ echo "Creating build folders"
 mkdir $BUILDDIR                                             # Create build folder
 mkdir $OBJDIR                                               # Create obj folder
 mkdir $LIBDIR                                               # Create lib folder
-
-echo "Creating dist folders"
+echo "Creating dist folder"
 mkdir $DISTDIR                                              # Create distribution folder
 
 # Compile object files
@@ -48,5 +47,3 @@ ar rcs $LIBDIR/$OUTPUT $OBJFILES                            # Compile static lib
 echo "Copying files to distribution folder"
 cp -r $INCDIR $DISTDIR
 cp -r $LIBDIR $DISTDIR
-
-# Copy lib into dist folder

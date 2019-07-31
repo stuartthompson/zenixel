@@ -68,14 +68,14 @@ if [ "$TASK" == "build" ] || [ "$TASK" == "" ]; then
             OBJFNE="${OBJF%.*}"                                 # Get obj file name without .cpp ext
             OBJ=$OBJFNE.o                                       # Create obj file name with .o extension
             echo "Compiling" $SRC "=>" $OBJDIR/$OBJ
-            g++ -c $SRC $INC -o $OBJDIR/$OBJ $CFLAGS            # Compile object file
+            g++ -c $SRC $INC $LIB -o $OBJDIR/$OBJ $CFLAGS       # Compile object file
             OBJFILES=$OBJFILES" "$OBJDIR/$OBJ                   # Concatenate to list of obj files
         done
     done
 
     # Compile library
     echo "Linking" $LIBDIR/$OUTPUT "from" $OBJFILES
-    ar rcs $LIBDIR/$OUTPUT $OBJFILES                            # Compile static library
+    ar -rcs $LIBDIR/$OUTPUT $OBJFILES                            # Compile static library
 
     # Copy output to dist folder
     echo "Copying files to distribution folder"

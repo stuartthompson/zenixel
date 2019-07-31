@@ -1,6 +1,6 @@
 #include <string>
 #include <iostream>
-#include <zen-math.h>
+#include "zmath.h"
 #include "point2d.h"
 #include "renderer.h"
 #include "scene.h"

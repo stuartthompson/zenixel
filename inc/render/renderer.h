@@ -8,10 +8,10 @@
 #include <SDL_ttf.h>
 #endif
 
-#include <zen-math.h>
-#include "circle.h"
-#include "line2d.h"
-#include "point2d.h"
+#include "../zmath.h"
+#include "./circle.h"
+#include "./line2d.h"
+#include "./point2d.h"
 
 class Renderer
 {

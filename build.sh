@@ -31,14 +31,12 @@ if [ "$PLATFORM" == "linux" ]; then
     echo "Targeting Linux"
     PLATFORM="linux"
     INC="$INC -I/usr/include/SDL2"
-    LIB="-lSDL2 -lSDL2_ttf"
     CFLAGS="-D_REENTRANT" $CFLAGS
 fi
 if [ "$PLATFORM" == "osx" ]; then
     echo "Targeting OSX"
     PLATFORM="osx"
     INC="$INC -I/usr/local/include/SDL2"
-    LIB="-L/usr/local/lib -lSDL2 -lSDL2_ttf"
     CFLAGS="-D_THREAD_SAFE" $CFLAGS
 fi
 
@@ -70,7 +68,7 @@ if [ "$TASK" == "build" ] || [ "$TASK" == "" ]; then
             OBJFNE="${OBJF%.*}"                                 # Get obj file name without .cpp ext
             OBJ=$OBJFNE.o                                       # Create obj file name with .o extension
             echo "Compiling" $SRC "=>" $OBJDIR/$OBJ
-            g++ -c $SRC $INC $LIB -o $OBJDIR/$OBJ $CFLAGS       # Compile object file
+            g++ -c $SRC $INC -o $OBJDIR/$OBJ $CFLAGS            # Compile object file
             OBJFILES=$OBJFILES" "$OBJDIR/$OBJ                   # Concatenate to list of obj files
         done
     done
@@ -101,4 +99,6 @@ if [ "$TASK" == "install" ] && [ "$INSTALLDIR" != "" ]; then
     cp -r $DISTDIR/inc/* $INSTALLDIR/inc/zenixel/
     echo "Installing zenixel library to" $INSTALLDIR"/lib/zenixel"
     cp $DISTDIR/lib/$OUTPUT $INSTALLDIR/lib/zenixel/
+
+    echo "To install into /usr folder run: ln -s $INSTALLDIR/lib/zenixel /usr/local/lib/zenixel && ln -s $INSTALLDIR/inc/zenixel /usr/local/include/zenixel"
 fi

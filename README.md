@@ -1,10 +1,10 @@
-# Zen2DLib
-A simple 2D library based upon SDL that can be used to draw 2D graphics to the screen.
-
-The purpose of this project is to learn more about static libraries in C++ and to build for myself a simple 2D graphics library that I can use in other projects requiring simple graphics capabilities.
+# Zenixel
+A simple graphics library based upon SDL that can be used to draw to the screen.
+It is unlikely that this will be an efficient graphics library. I am using it to learn more about SDL and lower-level graphics programming.
 
 ## Author
 This software was written by Stuart Thompson in summer of 2019.
+Website: https://www.stuartthompson.net
 Email: stuart@stuartthompson.net
 Twitter: stuartthompson
 

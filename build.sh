@@ -6,7 +6,7 @@ INSTALLDIR=$3
 
 # Validate arguments
 if [ "$PLATFORM" != "linux" ] && [ "$PLATFORM" != "osx" ]; then
-    echo "Usage: sh ./build.sh [platform]"
+    echo "Usage: sh ./build.sh platform [task] [install-dir]"
     exit 0
 fi
 if [ "$TASK" == "install" ] && [ "$INSTALLDIR" == "" ]; then
@@ -100,5 +100,5 @@ if [ "$TASK" == "install" ] && [ "$INSTALLDIR" != "" ]; then
     echo "Installing zenixel library to" $INSTALLDIR"/lib/zenixel"
     cp $DISTDIR/lib/$OUTPUT $INSTALLDIR/lib/zenixel/
 
-    echo "To install into /usr folder run: ln -s $INSTALLDIR/lib/zenixel /usr/local/lib/zenixel && ln -s $INSTALLDIR/inc/zenixel /usr/local/include/zenixel"
+    echo "To link to /usr folders run: ln -s $INSTALLDIR/lib/zenixel /usr/local/lib/zenixel && ln -s $INSTALLDIR/inc/zenixel /usr/local/include/zenixel"
 fi

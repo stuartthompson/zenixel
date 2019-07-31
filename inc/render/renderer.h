@@ -16,7 +16,7 @@
 class Renderer
 {
 public: 
-    Renderer(SDL_Renderer* renderer);
+    Renderer(SDL_Renderer* renderer, int canvasWidth, int canvasHeight);
     ~Renderer();
 
     /**
@@ -82,6 +82,16 @@ public:
 
 private:
     SDL_Renderer* renderer_;
-    TTF_Font *fontFreeSans_;
-	TTF_Font *fontDejavu_;
+    TTF_Font* fontFreeSans_;
+	TTF_Font* fontDejavu_;
+
+    int canvasWidth_;
+    int canvasHeight_;
+
+    /**
+     * Translates a vector from SDL-coords (origin at top-left) into zen-coords (origin at bottom-left)
+     * 
+     * @param vector The vector to translate.
+     */
+    Vector2D toZenCoords(const Vector2D& vector) const;
 };

@@ -4,10 +4,9 @@
 #include "zmath.h"
 #include "renderer.h"
 
-Renderer::Renderer(SDL_Renderer *renderer)
+Renderer::Renderer(SDL_Renderer *renderer, int canvasWidth, int canvasHeight) : 
+	renderer_(renderer), canvasWidth_(canvasWidth), canvasHeight_(canvasHeight)
 {
-	this->renderer_ = renderer;
-
 	TTF_Init();
 
 	// Initialize fonts
@@ -44,8 +43,9 @@ void Renderer::setDrawColor(const Color &color) const
 
 void Renderer::drawPoint2D(const Point2D &point) const
 {
-	this->setDrawColor(point.color);
-	SDL_RenderDrawPoint(this->renderer_, point.location.x, point.location.y);
+	Point2D zPoint = Point2D({toZenCoords(point.location), point.color});
+	this->setDrawColor(zPoint.color);
+	SDL_RenderDrawPoint(this->renderer_, zPoint.location.x, zPoint.location.y);
 }
 
 void Renderer::drawLine2D(const Line2D &line) const
@@ -71,7 +71,7 @@ void Renderer::drawLine2D(const Line2D &line) const
 		{
 			for (y = from.y; y <= to.y; y++)
 			{
-				SDL_RenderDrawPoint(this->renderer_, from.x, y);
+				this->drawPoint2D(Point2D({{from.x, y}, line.color}));
 			}
 		}
 		else
@@ -79,7 +79,7 @@ void Renderer::drawLine2D(const Line2D &line) const
 		{
 			for (y = from.y; y >= to.y; y--)
 			{
-				SDL_RenderDrawPoint(this->renderer_, from.x, y);
+				this->drawPoint2D(Point2D({{from.x, y}, line.color}));
 			}
 		}
 	}
@@ -89,14 +89,14 @@ void Renderer::drawLine2D(const Line2D &line) const
 		{
 			for (x = from.x; x <= to.x; x++)
 			{
-				SDL_RenderDrawPoint(this->renderer_, x, from.y);
+				this->drawPoint2D(Point2D({{x, from.y}, line.color}));
 			}
 		}
 		else // Line is drawn right to left so have to decrement from to (origin is top-left in SDL)
 		{
 			for (x = from.x; x >= to.x; x--)
 			{
-				SDL_RenderDrawPoint(this->renderer_, x, from.y);
+				this->drawPoint2D(Point2D({{x, from.y}, line.color}));
 			}
 		}
 	}
@@ -125,7 +125,7 @@ void Renderer::drawLine2D(const Line2D &line) const
 				for (x = from.x; x <= to.x; x++)
 				{
 					y = (slope * (x - from.x)) + from.y; // Plot the point using y = mx + c
-					SDL_RenderDrawPoint(this->renderer_, x, y);
+					this->drawPoint2D(Point2D({{x, y}, line.color}));
 				}
 			}
 			else
@@ -134,7 +134,7 @@ void Renderer::drawLine2D(const Line2D &line) const
 				for (x = from.x; x >= to.x; x--)
 				{
 					y = (slope * (x - from.x)) + from.y; // Plot the point using y = mx + c
-					SDL_RenderDrawPoint(this->renderer_, x, y);
+					this->drawPoint2D(Point2D({{x, y}, line.color}));
 				}
 			}
 		}
@@ -148,7 +148,7 @@ void Renderer::drawLine2D(const Line2D &line) const
 				{
 					// x = (y-c) / m
 					x = ((y - from.y) / slope) + from.x;
-					SDL_RenderDrawPoint(this->renderer_, x, y);
+					this->drawPoint2D(Point2D({{x, y}, line.color}));
 				}
 			}
 			else
@@ -158,7 +158,7 @@ void Renderer::drawLine2D(const Line2D &line) const
 				{
 					// x = (y-c) / m
 					x = ((y - from.y) / slope) + from.x;
-					SDL_RenderDrawPoint(this->renderer_, x, y);
+					this->drawPoint2D(Point2D({{x, y}, line.color}));
 				}
 			}
 		}
@@ -188,11 +188,11 @@ void Renderer::drawCircle(const Circle &circle) const
 		Vector2D endPoint = circle.center + r;									// Endpoint is center point + vector described by the current radius being drawn
 		if (circle.fill)
 		{
-			SDL_RenderDrawLine(this->renderer_, circle.center.x, circle.center.y, endPoint.x, endPoint.y);
+			this->drawLine2D(Line2D({Plane2D({circle.center.x, circle.center.y}, {endPoint.x, endPoint.y}), circle.color}));
 		}
 		else
 		{
-			SDL_RenderDrawPoint(this->renderer_, endPoint.x, endPoint.y);
+			this->drawPoint2D(Point2D({endPoint, circle.color}));
 		}
 	}
 }
@@ -217,10 +217,11 @@ void Renderer::drawText(const std::string &text, const Vector2D &position, const
 	int width, height;
 	TTF_SizeText(fontStyle, text.c_str(), &width, &height);
 
-	SDL_Rect textRect = {(int)position.x, (int)position.y, width, height};
+	Vector2D zPosition = toZenCoords(position);
+	SDL_Rect textRect = {(int)zPosition.x, (int)zPosition.y, width, height};
 
 	SDL_Point rotatePoint = {0, 0};
-	SDL_RenderCopyEx(this->renderer_, texture, NULL, &textRect, rotation, &rotatePoint, SDL_FLIP_NONE); // Render the textured rectangle
+	SDL_RenderCopyEx(this->renderer_, texture, NULL, &textRect, -rotation, &rotatePoint, SDL_FLIP_NONE); // Render the textured rectangle
 
 	// Free surface
 	SDL_FreeSurface(textSurface);
@@ -229,4 +230,9 @@ void Renderer::drawText(const std::string &text, const Vector2D &position, const
 void Renderer::render() const
 {
 	SDL_RenderPresent(this->renderer_);
+}
+
+Vector2D Renderer::toZenCoords(const Vector2D& vector) const 
+{
+	return Vector2D({vector.x, this->canvasHeight_ - vector.y});
 }

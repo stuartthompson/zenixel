@@ -91,19 +91,82 @@ float Vector2D::direction() const
     {
         if (this->y > 0)
         {
-            return M_PI / 2; // Vector is pointing straight up 
+            return M_PI / 2; // Vector is pointing straight up (down in SDL coords) 
         }
         else
         {   
-            return (3 * M_PI) / 2; // Vector is pointing straight down
+            return (3 * M_PI) / 2; // Vector is pointing straight down (up in SDL coords)
         }
     }
 
     // TODO: Quads matter here. Think about how the angle is affected in bottom-left.
     // Think carefully. Measuring from -y axis going left flips the o and a of the tri.
 
-    // sohcahtoa - so tan(a) = o/a  ==>  atan(y/x);
-    return atan(this->y / this->x);
+    // sohcahtoa - so tan(a) = o/a
+
+    // Quads
+
+    /*
+                |
+         Quad 2 | Quad 1
+                |
+        --------+--------
+                |
+         Quad 3 | Quad 4
+                |
+    
+        Quad 1:   atan(y/x)
+                |  /|
+                | / |o(y)
+                |/0 |
+                +------
+                 a(x)
+
+        Quad 2:   atan(-x/y)
+             o(x)
+            -----
+             \  |
+              \0|a(y)
+               \|
+        --------+
+
+        Quad 3:   atan(-y/-x)
+             a(x)
+        --------+
+            | 0/|
+        o(y)| / |
+            |/  |
+     
+        Quad 4:   atan(x/-y)
+                +--------
+                |\
+            a(y)|0\
+                |  \
+                -----
+                  o(x)
+     */
+
+
+    // Quad 1: Top right
+    if (this->x >= 0 && this->y >= 0)
+    {
+        return atan(this->y / this->x); // y is opposite in this quad
+    }
+    // Quad2 2: Top left
+    if (this->x < 0 && this->y >= 0)
+    {
+        return atan(-this->x / this->y) + (M_PI / 2); // x is opposite in this quad (+ PI because first 90 degrees from quad 1)
+    }
+    // Quad 3: Bottom left
+    if (this->x < 0 && this->y < 0)
+    {
+        return atan(-this->y / -this->x) + M_PI; // y is opposite (+ PI because first 180 from quad 1 and 2)
+    }
+    // Quad 4: Bottom right
+    if (this-> x>= 0 && this->y < 0)
+    {
+        return atan(this->x / -this->y) + ((3*M_PI) / 2); // x is opposite
+    }
 }
 
 float Vector2D::magnitude() const

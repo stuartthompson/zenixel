@@ -1,7 +1,7 @@
 #pragma once
 
-#include <zen-math.h>
-#include "color.h"
+#include "../zmath.h"
+#include "./color.h"
 
 struct Line2D
 {

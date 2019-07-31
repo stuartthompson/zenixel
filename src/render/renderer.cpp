@@ -1,7 +1,7 @@
 #include <iomanip>
 #include <iostream>
 #include <sstream>
-#include <zen-math.h>
+#include "zmath.h"
 #include "renderer.h"
 
 Renderer::Renderer(SDL_Renderer *renderer)
@@ -11,8 +11,14 @@ Renderer::Renderer(SDL_Renderer *renderer)
 	TTF_Init();
 
 	// Initialize fonts
+	#ifdef __APPLE__
+	this->fontFreeSans_ = TTF_OpenFont("/Library/Fonts/Tahoma.ttf", 18); // FreeSans 18
+	this->fontDejavu_ = TTF_OpenFont("/Library/Fonts/Tahoma.ttf", 14);   // DejaVu 18
+	#else
+	// Linux fonts
 	this->fontFreeSans_ = TTF_OpenFont("/usr/share/fonts/truetype/freefont/FreeSans.ttf", 18); // FreeSans 18
 	this->fontDejavu_ = TTF_OpenFont("/usr/share/fonts/truetype/dejavu/DejaVuMathTeXGyre.ttf", 14);   // DejaVu 18
+	#endif
 }
 
 Renderer::~Renderer()

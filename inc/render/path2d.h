@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-#include "line2d.h"
+#include "./line2d.h"
 
 /**
  * Represents a path as a series of line segments.

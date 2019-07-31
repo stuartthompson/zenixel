@@ -8,10 +8,11 @@
 
 #include <string>
 #include <vector>
-#include <zen-math.h>
+#include "../zmath.h"
 
-#include "circle.h"
-#include "point2d.h"
+#include "./circle.h"
+#include "./point2d.h"
+#include "./renderer.h"
 
 class Scene
 {

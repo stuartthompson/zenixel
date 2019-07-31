@@ -1,9 +1,16 @@
+#!/bin/bash
+
 PLATFORM=$1
 TASK=$2
+INSTALLDIR=$3
 
 # Validate arguments
 if [ "$PLATFORM" != "linux" ] && [ "$PLATFORM" != "osx" ]; then
     echo "Usage: sh ./build.sh [platform]"
+    exit 0
+fi
+if [ "$TASK" == "install" ] && [ "$INSTALLDIR" == "" ]; then
+    echo "Install dir must be specified when task is install."
     exit 0
 fi
 
@@ -74,4 +81,22 @@ if [ "$TASK" == "build" ] || [ "$TASK" == "" ]; then
     echo "Copying files to distribution folder"
     cp -r $INCDIR $DISTDIR
     cp -r $LIBDIR $DISTDIR
+fi
+
+if [ "$TASK" == "install" ] && [ "$INSTALLDIR" != "" ]; then
+    # Remove previous install
+    echo "Removing previous install directories"
+    rm -rf $INSTALLDIR/inc/zenixel
+    rm -rf $INSTALLDIR/lib/zenixel 
+
+    # Create install dirs
+    echo "Creating installation directories"
+    mkdir $INSTALLDIR/inc/zenixel
+    mkdir $INSTALLDIR/lib/zenixel
+
+    # Install headers and lib
+    echo "Installing zenixel headers to" $INSTALLDIR"/inc/zenixel"
+    cp -r $DISTDIR/inc/* $INSTALLDIR/inc/zenixel/
+    echo "Installing zenixel library to" $INSTALLDIR"/lib/zenixel"
+    cp $DISTDIR/lib/$OUTPUT $INSTALLDIR/lib/zenixel/
 fi

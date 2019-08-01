@@ -8,6 +8,7 @@
 #include <SDL_ttf.h>
 #endif
 
+#include <string>
 #include "../zmath.h"
 #include "./circle.h"
 #include "./line2d.h"
@@ -87,11 +88,4 @@ private:
 
     int canvasWidth_;
     int canvasHeight_;
-
-    /**
-     * Translates a vector from SDL-coords (origin at top-left) into zen-coords (origin at bottom-left)
-     * 
-     * @param vector The vector to translate.
-     */
-    Vector2D toZenCoords(const Vector2D& vector) const;
 };

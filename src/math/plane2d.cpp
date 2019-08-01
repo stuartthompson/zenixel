@@ -88,3 +88,25 @@ Vector2D Plane2D::midpoint() const
     }
     return Vector2D(midx, midy);
 }
+
+bool Plane2D::intersects(const Plane2D& plane) const 
+{
+    // Test orientation of two points of this plane with first point of target plane
+    Vector2D::Orientation orientation1 = Vector2D::orientation(this->start_, this->end_, plane.start_);
+    Vector2D::Orientation orientation2 = Vector2D::orientation(this->start_, this->end_, plane.end_);
+
+    // Planes intersect if orientations are different
+    if (orientation1 != orientation2)
+    {
+        return true;
+    }
+
+    // Planes are perfectly colinear if both orientations are colinear
+    if (orientation1 == Vector2D::Orientation::Colinear && orientation2 == Vector2D::Orientation::Colinear)
+    {
+        // TODO: Test if the colinear planes are overlapping (colinear planes might be separated)
+        return true;
+    }
+
+    return false;
+}

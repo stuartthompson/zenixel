@@ -20,9 +20,10 @@ INCDIR=./inc
 SRCROOT=./src
 SRCDIRS=(math render)
 BUILDDIR=./build
-DISTDIR=./dist
 OBJDIR=$BUILDDIR/obj
 LIBDIR=$BUILDDIR/lib
+TESTRUNNERDIR=$BUILDDIR/tests
+DISTDIR=./dist
 OUTPUT=libzenixel.a
 CFLAGS="-std=c++17"
 
@@ -55,6 +56,8 @@ if [ "$TASK" == "build" ] || [ "$TASK" == "" ]; then
     mkdir $LIBDIR                                               # Create lib folder
     echo "Creating dist folder"
     mkdir $DISTDIR                                              # Create distribution folder
+    echo "Creating test runner folder"
+    mkdir $TESTRUNNERDIR                                        # Create test runner folder
 
     # Compile object files
     echo "Compiling object files"
@@ -77,10 +80,16 @@ if [ "$TASK" == "build" ] || [ "$TASK" == "" ]; then
     echo "Linking" $LIBDIR/$OUTPUT "from" $OBJFILES
     ar -rcs $LIBDIR/$OUTPUT $OBJFILES                            # Compile static library
 
+    # Generate test runner
+    echo "Building test runner"
+    cxxtestgen --error-printer -o $TESTRUNNERDIR/testRunner.cpp ./tests/math/angle_tests.h # TODO: Include all test fixtures
+    g++ $TESTRUNNERDIR/testRunner.cpp -I/usr/local/include/cxxtest -o $TESTRUNNERDIR/runTests
+
     # Copy output to dist folder
     echo "Copying files to distribution folder"
     cp -r $INCDIR $DISTDIR
     cp -r $LIBDIR $DISTDIR
+    cp $TESTRUNNERDIR/runTests $DISTDIR
 fi
 
 if [ "$TASK" == "install" ] && [ "$INSTALLDIR" != "" ]; then
@@ -101,4 +110,10 @@ if [ "$TASK" == "install" ] && [ "$INSTALLDIR" != "" ]; then
     cp $DISTDIR/lib/$OUTPUT $INSTALLDIR/lib/zenixel/
 
     echo "To link to /usr folders run: ln -s $INSTALLDIR/lib/zenixel /usr/local/lib/zenixel && ln -s $INSTALLDIR/inc/zenixel /usr/local/include/zenixel"
+fi
+
+if [ "$TASK" == "test" ]; then
+    # Execute tests
+    echo "Executing test suite"
+    $TESTRUNNERDIR/runTests
 fi

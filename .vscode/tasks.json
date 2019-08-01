@@ -21,10 +21,19 @@
         {
             "label": "Compile",
             "type": "shell",
-            "command": "sh",
-            "args": [
-                "./build.sh"
-            ],
+            "command": "bash",
+            "osx": {
+                "args": [
+                    "./build.sh",
+                    "osx"
+                ]
+            },
+            "linux": {
+                "args": [
+                    "./build.sh",
+                    "linux"
+                ]
+            },
             "group": {
                 "kind": "build",
                 "isDefault": true

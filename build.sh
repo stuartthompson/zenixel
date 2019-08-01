@@ -31,13 +31,13 @@ if [ "$PLATFORM" == "linux" ]; then
     echo "Targeting Linux"
     PLATFORM="linux"
     INC="$INC -I/usr/include/SDL2"
-    CFLAGS="-D_REENTRANT" $CFLAGS
+    CFLAGS="-D_REENTRANT $CFLAGS"
 fi
 if [ "$PLATFORM" == "osx" ]; then
     echo "Targeting OSX"
     PLATFORM="osx"
     INC="$INC -I/usr/local/include/SDL2"
-    CFLAGS="-D_THREAD_SAFE" $CFLAGS
+    CFLAGS="-D_THREAD_SAFE $CFLAGS"
 fi
 
 if [ "$TASK" == "clean" ] || [ "$TASK" == "" ]; then

@@ -43,9 +43,8 @@ void Renderer::setDrawColor(const Color &color) const
 
 void Renderer::drawPoint2D(const Point2D &point) const
 {
-	Point2D zPoint = Point2D({toZenCoords(point.location), point.color});
-	this->setDrawColor(zPoint.color);
-	SDL_RenderDrawPoint(this->renderer_, zPoint.location.x, zPoint.location.y);
+	this->setDrawColor(point.color);
+	SDL_RenderDrawPoint(this->renderer_, point.location.x, point.location.y);
 }
 
 void Renderer::drawLine2D(const Line2D &line) const
@@ -217,8 +216,7 @@ void Renderer::drawText(const std::string &text, const Vector2D &position, const
 	int width, height;
 	TTF_SizeText(fontStyle, text.c_str(), &width, &height);
 
-	Vector2D zPosition = toZenCoords(position);
-	SDL_Rect textRect = {(int)zPosition.x, (int)zPosition.y, width, height};
+	SDL_Rect textRect = {(int)position.x, (int)position.y, width, height};
 
 	SDL_Point rotatePoint = {0, 0};
 	SDL_RenderCopyEx(this->renderer_, texture, NULL, &textRect, -rotation, &rotatePoint, SDL_FLIP_NONE); // Render the textured rectangle
@@ -230,9 +228,4 @@ void Renderer::drawText(const std::string &text, const Vector2D &position, const
 void Renderer::render() const
 {
 	SDL_RenderPresent(this->renderer_);
-}
-
-Vector2D Renderer::toZenCoords(const Vector2D& vector) const 
-{
-	return Vector2D({vector.x, this->canvasHeight_ - vector.y});
 }

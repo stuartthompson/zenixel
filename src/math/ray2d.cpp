@@ -7,5 +7,5 @@ RayPath2D Ray2D::tracePath(const std::vector<Plane2D>& planes, const int maxBoun
     RayPath2D path = RayPath2D();
 
     // Trace the path of the ray and record interactions
-    
+    return path;
 }

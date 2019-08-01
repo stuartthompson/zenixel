@@ -167,6 +167,9 @@ float Vector2D::direction() const
     {
         return atan(this->x / -this->y) + ((3*M_PI) / 2); // x is opposite
     }
+
+    std::cerr << "Reached default case of vector2d.direction(). This should never happen." << std::endl;
+    return 0;
 }
 
 float Vector2D::magnitude() const
